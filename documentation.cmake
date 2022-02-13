@@ -76,7 +76,9 @@ function(finalise_docs)
 
 	# Ensure all doxygen targets are added as dependencies of the docs target.
 	get_property(DOXYGEN_TARGETS GLOBAL PROPERTY ALL_DOXYGEN_TARGETS)
-	add_dependencies(docs ${DOXYGEN_TARGETS})
+	if (${DOXYGEN_TARGETS})
+		add_dependencies(docs ${DOXYGEN_TARGETS})
+	endif()
 
 	# The install step copies the directory into . To reduce build times, the docs target is
 	# NOT added to the ALL target. A consequence of this is that the docs target might not have
