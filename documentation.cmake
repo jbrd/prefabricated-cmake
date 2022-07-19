@@ -76,7 +76,7 @@ function(finalise_docs)
 
 	# Ensure all doxygen targets are added as dependencies of the docs target.
 	get_property(DOXYGEN_TARGETS GLOBAL PROPERTY ALL_DOXYGEN_TARGETS)
-	if (${DOXYGEN_TARGETS})
+	if (DEFINED DOXYGEN_TARGETS)
 		add_dependencies(docs ${DOXYGEN_TARGETS})
 	endif()
 
