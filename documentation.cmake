@@ -51,7 +51,7 @@ function(finalise_docs)
 	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/*")
 	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
 		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
-		message(INFO "Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
+		message("Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
 	endforeach()
 
 	# Now that we have built the components toctree, we can configure index.rst.
