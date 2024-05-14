@@ -23,7 +23,6 @@ endfunction()
 
 # Private function to add a test target to the project.
 function(add_test_target TARGET SOURCES)
-
 	add_executable(${TARGET} ${SOURCES})
 	apply_common_target_properties(${TARGET})
 	apply_common_dependencies(${TARGET})
@@ -38,12 +37,12 @@ function(add_test_target TARGET SOURCES)
 endfunction()
 
 # Check whether there is a Tests directory. If so, add a corresponding test target.
-function(gather_tests TARGET LABEL)
-
+function(gather_tests TARGET LABEL SOURCES)
 	gather_sources("Tests" TEST_SOURCES TEST_HEADERS)
 	if(NOT "${TEST_SOURCES}" STREQUAL "")
-		add_test_target(${TARGET}_Tests ${TEST_SOURCES})
-		target_link_libraries(${TARGET}_Tests ${TARGET})
+		set(COMBINED_SOURCES ${TEST_SOURCES})
+		list(APPEND COMBINED_SOURCES ${SOURCES})
+		add_test_target(${TARGET}_Tests "${COMBINED_SOURCES}")
 		target_include_directories(${TARGET}_Tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Private)
 		apply_internal_target_properties(${TARGET}_Tests)
 		set_property(TARGET ${TARGET}_Tests PROPERTY PROJECT_LABEL ${LABEL}_Tests)
@@ -128,7 +127,7 @@ function(add_component_public_library)
 	install(FILES ${PUBLIC_HEADERS} DESTINATION include/)
 
 	# Gather tests for this component
-	gather_tests(${TARGET} ${TARGET})
+	gather_tests(${TARGET} ${TARGET} ${SOURCES})
 
 	# Add doxygen target to project.
 	add_documentation()
@@ -155,7 +154,7 @@ function(add_component_static_library)
 	set_property(TARGET ${TARGET}_Static PROPERTY PROJECT_LABEL ${TARGET})
 
 	# Gather tests for this component
-	gather_tests(${TARGET}_Static ${TARGET})
+	gather_tests(${TARGET}_Static ${TARGET} ${SOURCES})
 
 	# Add doxygen target to project.
 	add_documentation()
@@ -195,7 +194,7 @@ function(add_component_runtime_library)
 	install(TARGETS ${TARGET}_Shared LIBRARY DESTINATION bin)
 
 	# Gather tests for this component
-	gather_tests(${TARGET}_Shared ${TARGET})
+	gather_tests(${TARGET}_Shared ${TARGET} ${SOURCES})
 
 	# Add doxygen target to project.
 	add_documentation()
