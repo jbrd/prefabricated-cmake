@@ -4,6 +4,14 @@ function(apply_common_target_properties TARGET)
 	# Enable C++14
 	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED true)
 
+endfunction()
+
+# Applies target properties that are common to all targets in this repository.
+function(apply_internal_target_properties TARGET)
+
+	# Common target properties
+	apply_common_target_properties(${TARGET})
+
 	# Set version properties.
 	set_target_properties(${TARGET} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_ABI_VERSION})
 
@@ -17,7 +25,7 @@ endfunction()
 function(add_test_target TARGET SOURCES)
 
 	add_executable(${TARGET} ${SOURCES})
-	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED true)
+	apply_common_target_properties(${TARGET})
 	apply_common_dependencies(${TARGET})
 	add_test(NAME ${TARGET} COMMAND $<TARGET_FILE:${TARGET}>)
 	if(VALGRIND)
@@ -37,7 +45,7 @@ function(gather_tests TARGET LABEL)
 		add_test_target(${TARGET}_Tests ${TEST_SOURCES})
 		target_link_libraries(${TARGET}_Tests ${TARGET})
 		target_include_directories(${TARGET}_Tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Private)
-		apply_common_target_properties(${TARGET}_Tests)
+		apply_internal_target_properties(${TARGET}_Tests)
 		set_property(TARGET ${TARGET}_Tests PROPERTY PROJECT_LABEL ${LABEL}_Tests)
 	endif()
 
@@ -56,7 +64,7 @@ function(add_component_program)
 
 	# Add executable target.
 	add_executable(${TARGET} ${PRIVATE_SOURCES})
-	apply_common_target_properties(${TARGET})
+	apply_internal_target_properties(${TARGET})
 	apply_common_dependencies(${TARGET})
 
 	# Executable targets are given an $ORIGIN RPATH because (private) runtime
@@ -91,17 +99,17 @@ function(add_component_public_library)
 	# is compiled into the shared and static targets afterwards.
 	add_library(${TARGET} OBJECT ${SOURCES})
 	set_property(TARGET ${TARGET} PROPERTY POSITION_INDEPENDENT_CODE 1)
-	apply_common_target_properties(${TARGET})
+	apply_internal_target_properties(${TARGET})
 	apply_common_dependencies(${TARGET})
 
 	# Add static library target.
 	add_library(${TARGET}_Static STATIC $<TARGET_OBJECTS:${TARGET}>)
-	apply_common_target_properties(${TARGET}_Static)
+	apply_internal_target_properties(${TARGET}_Static)
 	set_target_properties(${TARGET}_Static PROPERTIES FOLDER "Object Libraries")
 
 	# Add shared library target.
 	add_library(${TARGET}_Shared SHARED $<TARGET_OBJECTS:${TARGET}>)
-	apply_common_target_properties(${TARGET}_Shared)
+	apply_internal_target_properties(${TARGET}_Shared)
 	set_target_properties(${TARGET}_Shared PROPERTIES FOLDER "Object Libraries")
 
 	# On Windows, .lib files are generated for both static and dynamic libraries
@@ -142,7 +150,7 @@ function(add_component_static_library)
 
 	# Add static library target.
 	add_library(${TARGET}_Static STATIC ${SOURCES})
-	apply_common_target_properties(${TARGET}_Static)
+	apply_internal_target_properties(${TARGET}_Static)
 	apply_common_dependencies(${TARGET}_Static)
 	set_property(TARGET ${TARGET}_Static PROPERTY PROJECT_LABEL ${TARGET})
 
@@ -174,7 +182,7 @@ function(add_component_runtime_library)
 
 	# Add shared library target.
 	add_library(${TARGET}_Shared SHARED ${SOURCES})
-	apply_common_target_properties(${TARGET}_Shared)
+	apply_internal_target_properties(${TARGET}_Shared)
 	apply_common_dependencies(${TARGET}_Shared)
 
 	# Private runtime libraries have their 'lib' prefix removed to make them
@@ -207,7 +215,7 @@ function(add_component_test)
 	gather_sources("Tests" TEST_SOURCES TEST_HEADERS)
 	if(NOT "${TEST_SOURCES}" STREQUAL "")
 		add_test_target(${TARGET}_Tests ${TEST_SOURCES})
-		apply_common_target_properties(${TARGET}_Tests)
+		apply_internal_target_properties(${TARGET}_Tests)
 	endif()
 
 endfunction()
