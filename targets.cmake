@@ -47,7 +47,6 @@ function(gather_tests TARGET LABEL SOURCES)
 		apply_internal_target_properties(${TARGET}_Tests)
 		set_property(TARGET ${TARGET}_Tests PROPERTY PROJECT_LABEL ${LABEL}_Tests)
 	endif()
-
 endfunction()
 
 # Use this when the current directory represents an executable program component.
