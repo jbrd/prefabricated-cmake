@@ -1,12 +1,6 @@
 # Apply compiler defaults that are common across all targets
 macro(configure_compiler)
 
-	# Some C runtime libraries require this definition in order
-	# to define mathematical constants (M_PI, etc...)
-	if( !WIN32 )
-		add_compile_definitions(-D_USE_MATH_DEFINES)
-	endif()
-
 	# Expose software version to C++ via compiler definitions.
 	add_compile_definitions(PROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 	add_compile_definitions(PROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR})
