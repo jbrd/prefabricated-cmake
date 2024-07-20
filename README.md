@@ -235,3 +235,8 @@ where:
 
 If a project has a root-level `docs` directory, any `.rst` files inside this directory will be included
 as project-level documentation when the `docs` target is built.
+
+
+## Contributors
+
+* James Bird (@jbrd)
