@@ -26,6 +26,7 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Strict C/C++ compilation by default
   * Clang compilation by default (on both Linux and Windows)
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
+  * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
 * Entire cross-platform toolchain (Windows and Linux currently)
 * Prefabricated [Clang-Format](https://webkit.org/code-style-guidelines/) Support
   * A build target for automatically formatting source code with Clang-Format
@@ -74,7 +75,7 @@ Another great way to learn how to use prefabricated-cmake is to take a look at o
 
 The following public projects use prefabricated-cmake:
 
-* TODO
+* Coming soon!
 
 If you are using it in your project, and want to be included in this list, please submit a pull request!
 
@@ -132,7 +133,17 @@ set(PROJECT_AUTHOR "Author Name")
 build_components()
 ```
 
-Use the `PROJECT_AUTHOR` variable to specify the author name for your project. 
+Use the `PROJECT_AUTHOR` variable to specify the author name for your project.
+
+You can also define the following function in your top-level `CMakeLists.txt` file which will be automatically called by the build system for every target in the project. Use this to apply project-wide dependencies and settings to targets:
+
+```
+# Applies target properties that are common to all targets in this repository.
+function(apply_common_target_properties TARGET)
+	# Enable C++20
+	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED true)
+endfunction()
+```
 
 
 ### Components

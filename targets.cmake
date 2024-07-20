@@ -1,8 +1,8 @@
 # Applies target properties that are common to all targets in this repository.
 function(apply_common_target_properties TARGET)
 
-	# Enable C++14
-	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED true)
+	# Enable C++17
+	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
 
 endfunction()
 
@@ -25,7 +25,6 @@ endfunction()
 function(add_test_target TARGET SOURCES)
 	add_executable(${TARGET} ${SOURCES})
 	apply_common_target_properties(${TARGET})
-	apply_common_dependencies(${TARGET})
 	add_test(NAME ${TARGET} COMMAND $<TARGET_FILE:${TARGET}>)
 	if(VALGRIND)
 		set(MEMCHECK_ARGS "--tool=memcheck" "--leak-check=full" "--error-exitcode=1")
@@ -63,7 +62,6 @@ function(add_component_program)
 	# Add executable target.
 	add_executable(${TARGET} ${PRIVATE_SOURCES})
 	apply_internal_target_properties(${TARGET})
-	apply_common_dependencies(${TARGET})
 
 	# Executable targets are given an $ORIGIN RPATH because (private) runtime
 	# library components are deployed to the bin directory.
@@ -98,7 +96,6 @@ function(add_component_public_library)
 	add_library(${TARGET} OBJECT ${SOURCES})
 	set_property(TARGET ${TARGET} PROPERTY POSITION_INDEPENDENT_CODE 1)
 	apply_internal_target_properties(${TARGET})
-	apply_common_dependencies(${TARGET})
 
 	# Add static library target.
 	add_library(${TARGET}_Static STATIC $<TARGET_OBJECTS:${TARGET}>)
@@ -149,7 +146,6 @@ function(add_component_static_library)
 	# Add static library target.
 	add_library(${TARGET}_Static STATIC ${SOURCES})
 	apply_internal_target_properties(${TARGET}_Static)
-	apply_common_dependencies(${TARGET}_Static)
 	set_property(TARGET ${TARGET}_Static PROPERTY PROJECT_LABEL ${TARGET})
 
 	# Gather tests for this component
@@ -181,7 +177,6 @@ function(add_component_runtime_library)
 	# Add shared library target.
 	add_library(${TARGET}_Shared SHARED ${SOURCES})
 	apply_internal_target_properties(${TARGET}_Shared)
-	apply_common_dependencies(${TARGET}_Shared)
 
 	# Private runtime libraries have their 'lib' prefix removed to make them
 	# easier to dlopen.

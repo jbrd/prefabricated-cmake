@@ -44,13 +44,6 @@ macro(gather_dependencies)
 
 endmacro(gather_dependencies)
 
-# Applies the dependencies to the given target
-function(apply_common_dependencies TARGET)
-
-	# TODO: Add target_link_libraries, add_dependencies here.
-
-endfunction()
-
 # Set up any additional targets that are provided by dependencies (usually toolchain dependencies)
 function(finalise_dependencies)
 	get_property(SRC GLOBAL PROPERTY ALL_SOURCES)
