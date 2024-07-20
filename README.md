@@ -1,6 +1,20 @@
 # prefabricated-cmake
 
-Prefabricated CMake build scripts for component-based C++ projects
+A CMake build system for component-based C++ projects.
+
+
+## What and Why?
+
+CMake is great, but often has a high setup cost for new projects. Setting up a new project that supports modular components, unit testing, memory checking, code formatting, documentation, installation, etc can be time consuming.
+
+The primary goal of this project is to reduce the overhead by providing a CMake-based build system with prefabricated support for these things.
+
+
+### Inspiration
+
+This build system is inspired by Unreal Engine's build system, which allows a large and complicated piece of software to be assembled from many smaller components. New components are easy to add with little scripting required.
+
+The goal of this project is to provide a similar philosophy for standalone C++ projects.
 
 
 ## Features
@@ -8,7 +22,7 @@ Prefabricated CMake build scripts for component-based C++ projects
 * Prefabricated CMake scripts for component-based C++ projects
   * Add new components with a tiny amount of CMake
   * Each component can have its own public sources, private sources, documentation, and tests
-  * C++14 by default
+  * C++17 by default
   * Strict C/C++ compilation by default
   * Clang compilation by default (on both Linux and Windows)
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
@@ -17,11 +31,12 @@ Prefabricated CMake build scripts for component-based C++ projects
   * A build target for automatically formatting source code with Clang-Format
   * Optionally place a `.clang-format` file in the root of your project to override the defaults
 * Prefabricated support for unit test executables
-  * All tests are run standalone and then through Valgrind on Linux for additional validation
+  * All tests are run standalone and then through Valgrind on Linux for additional memory validation
 * Prefabricated Sphinx documentation project
   * Supports both project-level and component-level documentation
   * Out-the-box support for Breathe and Doxygen (for automatically generating
     C++ documentation and referencing it in Sphinx docs)
+  * Uses the Sphinx ReadTheDocs theme for visually pleasing documentation
 
 
 ## Getting Started
@@ -53,6 +68,17 @@ This repository is designed to be referenced via a git submodule by the projects
 * Install to a local deployment `cmake --build ./ --target install`
 
 
+## Other Example Projects
+
+Another great way to learn how to use prefabricated-cmake is to take a look at other projects that are using it.
+
+The following public projects use prefabricated-cmake:
+
+* TODO
+
+If you are using it in your project, and want to be included in this list, please submit a pull request!
+
+
 ## Toolchain Requirements
 
 ### Linux
@@ -70,9 +96,9 @@ This repository is designed to be referenced via a git submodule by the projects
 
 ### Windows
 
-* Visual Studio 2019 with the following components:
-  * C++ Clang Compiler for Windows (12.0.0 or above)
-  * C++ Clang-cl for v142 build tools
+* Visual Studio 2022 with the following components:
+  * C++ Clang Compiler for Windows (17.0.0 or above)
+  * MSBuild support for LLVM (clang-cl) toolset
   * C++ CMake tools for Windows
 * Git for Windows
 * Chocolatey and the following packages:
