@@ -123,7 +123,7 @@ function(add_component_public_library)
 	install(FILES ${PUBLIC_HEADERS} DESTINATION include/)
 
 	# Gather tests for this component
-	gather_tests(${TARGET} ${TARGET} ${SOURCES})
+	gather_tests(${TARGET} ${TARGET} "${SOURCES}")
 
 	# Add doxygen target to project.
 	add_documentation()
@@ -149,7 +149,7 @@ function(add_component_static_library)
 	set_property(TARGET ${TARGET}_Static PROPERTY PROJECT_LABEL ${TARGET})
 
 	# Gather tests for this component
-	gather_tests(${TARGET}_Static ${TARGET} ${SOURCES})
+	gather_tests(${TARGET}_Static ${TARGET} "${SOURCES}")
 
 	# Add doxygen target to project.
 	add_documentation()
@@ -188,7 +188,7 @@ function(add_component_runtime_library)
 	install(TARGETS ${TARGET}_Shared LIBRARY DESTINATION bin)
 
 	# Gather tests for this component
-	gather_tests(${TARGET}_Shared ${TARGET} ${SOURCES})
+	gather_tests(${TARGET}_Shared ${TARGET} "${SOURCES}")
 
 	# Add doxygen target to project.
 	add_documentation()

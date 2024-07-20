@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-void ExamplePublicLibrary::hello()
+PUBLIC_API void ExamplePublicLibrary::hello()
 {
     std::cout << "Hello from ExamplePublicLibrary" << std::endl;
     hello_private();

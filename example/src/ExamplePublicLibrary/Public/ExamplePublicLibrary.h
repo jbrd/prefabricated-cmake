@@ -1,5 +1,5 @@
 #pragma once
 
 namespace ExamplePublicLibrary {
-void hello();
+PUBLIC_API void hello();
 }
