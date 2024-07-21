@@ -59,6 +59,7 @@ This repository is designed to be referenced via a git submodule by the projects
 * Generate project files with: `cmake ../`
 * Build the project with: `cmake --build ./`
 * Build the documentation with: `cmake --build ./ --target docs`
+  * View the documentation by opening: `docs\sphinx\build\html\index.html`
 * Run the tests with: `ctest -C Debug ./`
 * Format source code with: `cmake --build ./ --target format`
 
