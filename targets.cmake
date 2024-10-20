@@ -1,9 +1,6 @@
 # Applies target properties that are common to all targets in this repository.
+# Override this function to apply common modifications to all targets
 function(apply_common_target_properties TARGET)
-
-	# Enable C++17
-	set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED true)
-
 endfunction()
 
 # Applies target properties that are common to all targets in this repository.

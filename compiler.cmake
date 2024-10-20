@@ -1,3 +1,6 @@
+# Set default C++ standard (can be overridden)
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard to use (see CMake docs)")
+
 # Apply compiler defaults that are common across all targets
 macro(configure_compiler)
 
