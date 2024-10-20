@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.28)
+
 include(${CMAKE_CURRENT_LIST_DIR}/compiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/dependencies.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/documentation.cmake)
