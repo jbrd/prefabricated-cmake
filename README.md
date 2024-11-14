@@ -1,3 +1,5 @@
+[![CMake on multiple platforms](https://github.com/jbrd/prefabricated-cmake/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jbrd/prefabricated-cmake/actions/workflows/cmake-multi-platform.yml)
+
 # prefabricated-cmake
 
 A CMake build system for component-based C++ projects.
