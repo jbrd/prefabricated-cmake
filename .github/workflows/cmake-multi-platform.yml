@@ -11,7 +11,6 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: true
 
       # Set up a matrix to run the following 3 configurations:
@@ -23,9 +22,22 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
+        python_version: [3.12]
+        include:
+          - os: windows-latest
+            c_compiler: "clang"
+            cxx_compiler: "clang++"
+          - os: ubuntu-latest
+            c_compiler: "clang"
+            cxx_compiler: "clang++"
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python_version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python_version }}
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -35,25 +47,46 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/example/build" >> "$GITHUB_OUTPUT"
         echo "build-install-dir=${{ github.workspace }}/example/build/install" >> "$GITHUB_OUTPUT"
 
+    - name: Install Dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt install clang-format doxygen valgrind
+    - name: Install Dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: choco install doxygen.install
+
+    - name: Install Python Dependencies
+      run: pip3 install sphinx breathe sphinx-rtd-theme
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      working-directory: ./example
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cxx_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_INSTALL_PREFIX=${{ steps.strings.outputs.build-install-dir }}
-        -S ${{ github.workspace }}
+        -S ${{ github.workspace }}/example
 
     - name: Build
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      run: cmake --build --config ${{ matrix.build_type }}
+      run: cmake --build ./ --config ${{ matrix.build_type }}
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
+
+    - name: Documentation
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --build ./ --target docs
+
+    - name: Format Checks
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --build ./ --target format
+
+    - name: Install
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: cmake --build ./ --config ${{ matrix.build_type }} --target install
