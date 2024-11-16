@@ -58,7 +58,7 @@ jobs:
       run: choco install doxygen.install
     - name: Install Dependencies (MacOS)
       if: runner.os == 'macOS'
-      run: brew install clang-format doxygen valgrind
+      run: port install clang-format doxygen valgrind
 
     - name: Install Python Dependencies
       run: pip3 install sphinx breathe sphinx-rtd-theme
