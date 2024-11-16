@@ -29,6 +29,14 @@ endfunction()
 # declared. This function is responsible for adding the root-level docs target.
 function(finalise_docs)
 
+	# Copy project-level documentation into the destination docs folder.
+	# Do this so that the project's index.rst file takes precedence over the fallback index.rst
+	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/*")
+	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
+		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
+		message("Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
+	endforeach()
+
 	# Copy doc/sphinx into the current binary directory
 	file(COPY ${DOC_TEMPLATE_ROOT}/sphinx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs)
 
@@ -45,13 +53,6 @@ function(finalise_docs)
 		get_filename_component(COMPONENT_NAME ${COMPONENT_FOLDER} NAME)
 		file(COPY ${DOC_FOLDER}/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/${COMPONENT_NAME})
 		set(COMPONENT_TOCTREE "${COMPONENT_TOCTREE}\n   ${COMPONENT_NAME}/index")
-	endforeach()
-
-	# Copy project-level documentation into the destination docs folder.
-	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/*")
-	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
-		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
-		message("Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
 	endforeach()
 
 	# Now that we have built the components toctree, we can configure index.rst.
