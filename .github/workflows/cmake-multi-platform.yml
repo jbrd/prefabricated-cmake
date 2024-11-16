@@ -85,7 +85,7 @@ jobs:
 
     - name: Format Checks
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: cmake --build ./ --target format
+      run: cmake --build ./ --target format-check
 
     - name: Install
       working-directory: ${{ steps.strings.outputs.build-output-dir }}

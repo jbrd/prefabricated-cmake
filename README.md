@@ -33,7 +33,8 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
 * Entire cross-platform toolchain (Windows and Linux currently)
 * Prefabricated [Clang-Format](https://webkit.org/code-style-guidelines/) Support
-  * A build target for automatically formatting source code with Clang-Format
+  * A `format` target for automatically formatting source code with Clang-Format
+  * A `format-check` target for validating that source code is correctly Clang-Formatted
   * Optionally place a `.clang-format` file in the root of your project to override the defaults
 * Prefabricated support for unit test executables
   * All tests are run standalone and then through Valgrind on Linux for additional memory validation
@@ -63,7 +64,8 @@ This repository is designed to be referenced via a git submodule by the projects
 * Build the documentation with: `cmake --build ./ --target docs`
   * View the documentation by opening: `docs\sphinx\build\html\index.html`
 * Run the tests with: `ctest -C Debug ./`
-* Format source code with: `cmake --build ./ --target format`
+* Validate source code formatting with: `cmake --build ./ --target format-check`
+* Automatically format source code with: `cmake --build ./ --target format`
 
 
 ### Installing The Example to a Local Deployment
