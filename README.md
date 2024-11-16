@@ -39,6 +39,7 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
 * Prefabricated support for unit test executables
   * All tests are run standalone and then through Valgrind on MacOS and Linux for additional memory validation
 * Prefabricated Sphinx documentation project
+  * Generated documentation output for the example project [can be viewed here](https://jbrd.github.io/prefabricated-cmake/)
   * Supports both project-level and component-level documentation
   * Out-the-box support for Breathe and Doxygen (for automatically generating
     C++ documentation and referencing it in Sphinx docs)
@@ -240,6 +241,8 @@ where:
 
 If a project has a root-level `docs` directory, any `.rst` files inside this directory will be included
 as project-level documentation when the `docs` target is built.
+
+The example project includes some example documentation pages. The generated documentation output for the example project [can be viewed here](https://jbrd.github.io/prefabricated-cmake/).
 
 
 ## Contributors
