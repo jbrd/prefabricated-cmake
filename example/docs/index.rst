@@ -1,6 +1,9 @@
 Welcome to |project|'s documentation!
 =====================================
 
+Project-Level Documentation
+---------------------------
+
 This example shows that any file or folder inside a project's root-level `docs` folder
 is included in the Sphinx documentation build, and takes prescedence over the default.
 
@@ -9,16 +12,17 @@ project-level documentation:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Project-Level Documentation
 
    guide.rst
 
+
+Components
+----------
 
 The following example shows how to include the component-level toctree:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Components
 
    @COMPONENT_TOCTREE@
 
