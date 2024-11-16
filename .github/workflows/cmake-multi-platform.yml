@@ -19,7 +19,7 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
         python_version: [3.12]
@@ -28,6 +28,9 @@ jobs:
             c_compiler: "clang"
             cxx_compiler: "clang++"
           - os: ubuntu-latest
+            c_compiler: "clang"
+            cxx_compiler: "clang++"
+          - os: macos-latest
             c_compiler: "clang"
             cxx_compiler: "clang++"
 
@@ -53,6 +56,9 @@ jobs:
     - name: Install Dependencies (Windows)
       if: runner.os == 'Windows'
       run: choco install doxygen.install
+    - name: Install Dependencies (MacOS)
+      if: runner.os == 'macOS'
+      run: brew install clang-format doxygen valgrind
 
     - name: Install Python Dependencies
       run: pip3 install sphinx breathe sphinx-rtd-theme

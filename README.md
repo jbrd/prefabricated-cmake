@@ -28,16 +28,16 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Each component can have its own public sources, private sources, documentation, and tests
   * C++17 by default (can be overridden by overriding `CMAKE_CXX_STANDARD` variable)
   * Strict C/C++ compilation by default (can be overridden via the `STRICT` variable)
-  * Clang compilation by default (on both Linux and Windows)
+  * Clang compilation by default (Linux, MacOS, and Windows)
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
   * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
-* Entire cross-platform toolchain (Windows and Linux currently)
+* Entire cross-platform toolchain (Linux, MacOS, Windows)
 * Prefabricated [Clang-Format](https://webkit.org/code-style-guidelines/) Support
   * A `format` target for automatically formatting source code with Clang-Format
   * A `format-check` target for validating that source code is correctly Clang-Formatted
   * Optionally place a `.clang-format` file in the root of your project to override the defaults
 * Prefabricated support for unit test executables
-  * All tests are run standalone and then through Valgrind on Linux for additional memory validation
+  * All tests are run standalone and then through Valgrind on MacOS and Linux for additional memory validation
 * Prefabricated Sphinx documentation project
   * Supports both project-level and component-level documentation
   * Out-the-box support for Breathe and Doxygen (for automatically generating
@@ -89,7 +89,7 @@ If you are using it in your project, and want to be included in this list, pleas
 
 ## Toolchain Requirements
 
-### Linux
+### Linux and MacOS
 
 * Git
 * CMake
