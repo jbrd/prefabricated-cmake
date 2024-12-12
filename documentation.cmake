@@ -1,5 +1,13 @@
 set(DOC_TEMPLATE_ROOT ${CMAKE_CURRENT_LIST_DIR}/docs)
 
+# Allow Doxygen.in to be overridden in the project root directory.
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+	set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+else()
+	set(DOXYGEN_IN ${DOC_TEMPLATE_ROOT}/Doxyfile.in)
+endif()
+message("-- Using Doxygen.In Template: ${DOXYGEN_IN}")
+
 # Add a documentation target for the current directory.
 function(add_documentation)
 
@@ -12,7 +20,7 @@ function(add_documentation)
 
 		# Generate Doxygen XML for this component (so that it can be referenced by
 		# this components' documentation).
-		configure_file(${DOC_TEMPLATE_ROOT}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+		configure_file(${DOXYGEN_IN} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 		add_custom_target(${TARGET}_Doxygen
 			${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -29,16 +37,16 @@ endfunction()
 # declared. This function is responsible for adding the root-level docs target.
 function(finalise_docs)
 
-	# Copy project-level documentation into the destination docs folder.
-	# Do this so that the project's index.rst file takes precedence over the fallback index.rst
-	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/*")
-	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
-		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
-		message("Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
-	endforeach()
-
 	# Copy doc/sphinx into the current binary directory
 	file(COPY ${DOC_TEMPLATE_ROOT}/sphinx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs)
+
+	# Copy project-level documentation into the destination docs folder.
+	# Do this so that the project's index.rst file takes precedence over the fallback index.rst
+	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/sphinx/source/*")
+	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
+		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
+		message("-- Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
+	endforeach()
 
 	# Configure conf.py.
 	get_property(BREATHE_PROJECTS GLOBAL PROPERTY ALL_BREATHE_PROJECTS)
