@@ -37,16 +37,20 @@ endfunction()
 # declared. This function is responsible for adding the root-level docs target.
 function(finalise_docs)
 
-	# Copy doc/sphinx into the current binary directory
-	file(COPY ${DOC_TEMPLATE_ROOT}/sphinx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs)
+	# Copy doc/sphinx into the current binary directory, excluding index.rst
+	file(COPY ${DOC_TEMPLATE_ROOT}/sphinx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs PATTERN "index.rst" EXCLUDE)
 
 	# Copy project-level documentation into the destination docs folder.
-	# Do this so that the project's index.rst file takes precedence over the fallback index.rst
 	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/sphinx/source/*")
 	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
 		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
 		message("-- Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
 	endforeach()
+
+	# If the project didn't provide index.rst, copy the fallback index.rst now
+	if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst)
+		file(COPY ${DOC_TEMPLATE_ROOT}/sphinx/index.rst DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs)
+	endif ()
 
 	# Configure conf.py.
 	get_property(BREATHE_PROJECTS GLOBAL PROPERTY ALL_BREATHE_PROJECTS)
