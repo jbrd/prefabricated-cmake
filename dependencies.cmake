@@ -6,7 +6,8 @@ macro(gather_dependencies)
 	if (NOT CLANG_FORMAT)
 		message(STATUS "clang-format not found")
 	else()
-		message(STATUS "clang-format found: ${CLANG_FORMAT}")
+		execute_process(COMMAND clang-format --version OUTPUT_VARIABLE CLANG_FORMAT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+		message(STATUS "${CLANG_FORMAT_VERSION} found: ${CLANG_FORMAT}")
 	endif()
 
 	# valgrind
