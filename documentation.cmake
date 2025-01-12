@@ -37,40 +37,41 @@ endfunction()
 # declared. This function is responsible for adding the root-level docs target.
 function(finalise_docs)
 
-	# Copy doc/sphinx into the current binary directory, excluding index.rst
-	file(COPY ${DOC_TEMPLATE_ROOT}/sphinx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs PATTERN "index.rst" EXCLUDE)
-
-	# Copy project-level documentation into the destination docs folder.
-	file(GLOB PROJECT_DOC_FILES "${PROJECT_SOURCE_DIR}/docs/sphinx/source/*")
-	foreach(PROJECT_DOC_FILE ${PROJECT_DOC_FILES})
-		file(COPY ${PROJECT_DOC_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
-		message("-- Copying '${PROJECT_DOC_FILE}' to '${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source'")
-	endforeach()
-
-	# If the project didn't provide index.rst, copy the fallback index.rst now
-	if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst)
-		file(COPY ${DOC_TEMPLATE_ROOT}/sphinx/index.rst DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs)
-	endif ()
-
 	# Configure conf.py.
 	get_property(BREATHE_PROJECTS GLOBAL PROPERTY ALL_BREATHE_PROJECTS)
-	configure_file(${DOC_TEMPLATE_ROOT}/sphinx/source/conf.py ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/conf.py)
+	configure_file(${DOC_TEMPLATE_ROOT}/sphinx/source/conf.py ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/configured/conf.py)
+
+	# Copy doc/sphinx into the current binary directory, excluding index.rst
+	# Then copy project-level documentation into the destination docs folder.
+	add_custom_target(copy_sphinx_files)
+	add_custom_command(TARGET copy_sphinx_files PRE_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy_directory ${DOC_TEMPLATE_ROOT}/sphinx ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx)
+	add_custom_command(TARGET copy_sphinx_files POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy_directory ${PROJECT_SOURCE_DIR}/docs/sphinx ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx)
 
 	# Copy each component's Docs folder into the destination docs folder. Whilst doing so,
 	# built a Sphinx toctree that can be substituted into index.rst when it is configured.
+	add_custom_target(copy_doc_folders)
 	set(COMPONENT_TOCTREE "")
 	get_property(DOC_FOLDERS GLOBAL PROPERTY ALL_DOC_FOLDERS)
 	foreach (DOC_FOLDER ${DOC_FOLDERS})
 		get_filename_component(COMPONENT_FOLDER ${DOC_FOLDER} DIRECTORY)
 		get_filename_component(COMPONENT_NAME ${COMPONENT_FOLDER} NAME)
-		file(COPY ${DOC_FOLDER}/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/${COMPONENT_NAME})
+		add_custom_command(TARGET copy_doc_folders PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${DOC_FOLDER} ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/${COMPONENT_NAME})
 		set(COMPONENT_TOCTREE "${COMPONENT_TOCTREE}\n   ${COMPONENT_NAME}/index")
 	endforeach()
 
 	# Now that we have built the components toctree, we can configure index.rst.
-	file(RENAME ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst.template)
-	configure_file(${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst.template ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst)
-	file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source/index.rst.template)
+	add_custom_target(copy_configured_doc_files)
+	if (EXISTS ${PROJECT_SOURCE_DIR}/docs/sphinx/source/index.rst)
+		set(INDEX_RST ${PROJECT_SOURCE_DIR}/docs/sphinx/source/index.rst)
+	else()
+		set(INDEX_RST ${DOC_TEMPLATE_ROOT}/sphinx/source/index.rst)
+	endif()
+	configure_file(${INDEX_RST} ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/configured/index.rst)
+	add_custom_command(
+		TARGET copy_configured_doc_files PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy
+		${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/configured/conf.py
+		${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/configured/index.rst
+		${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx/source)
 
 	# Now generate the docs target, which will invoke Sphinx to generate the docs.
 	if (WIN32)
@@ -83,6 +84,9 @@ function(finalise_docs)
 		${SPHINX_COMMAND} html
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx
 	)
+	add_dependencies(docs copy_configured_doc_files)
+	add_dependencies(copy_configured_doc_files copy_doc_folders)
+	add_dependencies(copy_doc_folders copy_sphinx_files)
 
 	set_target_properties(docs PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 	set_target_properties(docs PROPERTIES FOLDER Documentation)
