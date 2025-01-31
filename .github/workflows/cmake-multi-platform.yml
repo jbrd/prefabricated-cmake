@@ -21,7 +21,6 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         build_type: [Release]
-        c_compiler: [clang, gcc, cl]
         python_version: [3.12]
         include:
           - os: windows-latest
