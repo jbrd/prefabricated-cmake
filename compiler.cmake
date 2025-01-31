@@ -1,3 +1,6 @@
+# Option to control strict compilation (all warnings, warnings as errors)
+option(STRICT "Strict compilation (all warnings, warnings as errors) [on/off]" ON)
+
 # Set default C++ standard (can be overridden)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard to use (see CMake docs)")
 
@@ -10,19 +13,18 @@ macro(configure_compiler)
 	add_compile_definitions(PROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH})
 
 	# Warning severity (STRICT by default).
-	set( STRICT True CACHE BOOL "Enable strict mode (on by default)" )
-	if( STRICT )
-		if( WIN32 )
-			set( CMAKE_C_FLAGS "/W4 /WX ${CMAKE_C_FLAGS}" )
-			set( CMAKE_CXX_FLAGS "/W4 /WX ${CMAKE_CXX_FLAGS}" )
+	if(${STRICT})
+		if(WIN32)
+			set(CMAKE_C_FLAGS "/W4 /WX ${CMAKE_C_FLAGS}")
+			set(CMAKE_CXX_FLAGS "/W4 /WX ${CMAKE_CXX_FLAGS}")
 		else()
-			set( CMAKE_C_FLAGS "-Wall -Wextra -Werror -Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition -pedantic-errors ${CMAKE_C_FLAGS}" )
-			set( CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic-errors ${CMAKE_CXX_FLAGS}" )
+			set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition -pedantic-errors ${CMAKE_C_FLAGS}")
+			set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic-errors ${CMAKE_CXX_FLAGS}")
 		endif()
 	endif( )
 
 	# Standard definitions - PUBLIC_API macro for marking symbols to be exported in .dlls
-	if( WIN32 )
+	if(WIN32)
 		add_compile_definitions(PUBLIC_API=__declspec\(dllexport\))
 	else()
 		add_compile_definitions(PUBLIC_API=)

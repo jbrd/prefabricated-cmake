@@ -27,7 +27,7 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Add new components with a tiny amount of CMake
   * Each component can have its own public sources, private sources, documentation, and tests
   * C++17 by default (can be overridden by overriding `CMAKE_CXX_STANDARD` variable)
-  * Strict C/C++ compilation by default (can be overridden via the `STRICT` variable)
+  * Strict C/C++ compilation by default (can be overridden via the `STRICT` option)
   * Clang compilation by default (Linux, MacOS, and Windows)
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
   * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
@@ -88,35 +88,55 @@ The following public projects use prefabricated-cmake:
 If you are using it in your project, and want to be included in this list, please submit a pull request!
 
 
+## Build Options
+
+The following options can be specified on the command-line when configuring CMake via the `-D` argument:
+
+| Option                | Description                    | Default Value          |
+|-----------------------|--------------------------------|---------------|
+| `CLANG_FORMAT`        | Include Clang Format targets [on/off]                                         | on             |
+| `DOCUMENTATION`       | Include documentation targets [on/off]                                         | on             |
+| `STRICT`       | Strict compilation (all warnings, warnings as errors) [on/off]                             | on             |
+| `VALGRIND`            | Additionally run unit tests through Valgrind (if installed, Linux only) [on/off] | on             |
+
+Developers are encouraged to install the full set of toolchain requirements (see below) and leave all of these turned on by default, such that the entire toolchain is exercised.
+
+
 ## Toolchain Requirements
 
 ### Linux and MacOS
 
-* Git
-* CMake
-* Clang
-* Clang-format
-* Valgrind
-* Doxygen
-* Python 3
-* Sphinx (`pip3 install sphinx`)
-* Breathe (`pip3 install breathe`)
-* ReadTheDocs Theme for Sphinx (`pip3 install sphinx-rtd-theme`)
-
-### Windows
-
-* Visual Studio 2022 with the following components:
-  * C++ Clang Compiler for Windows (17.0.0 or above)
-  * MSBuild support for LLVM (clang-cl) toolset
-  * C++ CMake tools for Windows
-* Git for Windows
-* Chocolatey and the following packages:
-  * Doxygen (`choco install doxygen.install`)
-  * Python 3 (`choco install python3`)
+* Required
+  * CMake
+  * GCC or Clang
+* Code Formatting (when `CLANG_FORMAT=on`)
+  * Clang
+  * Clang-format
+* Documentation (when `DOCUMENTATION=on`)
+  * Doxygen
+  * Python 3
   * Sphinx (`pip3 install sphinx`)
   * Breathe (`pip3 install breathe`)
   * ReadTheDocs Theme for Sphinx (`pip3 install sphinx-rtd-theme`)
+* Testing
+  * Valgrind (optional and only when `VALGRIND=on`)
 
+### Windows
+
+* Required
+  * Visual Studio 2022 with the following components:
+    * C++ CMake tools for Windows
+* Code Formatting (when `CLANG_FORMAT=on`)
+  * Visual Studio 2022 with the following components:
+    * C++ Clang Compiler for Windows (17.0.0 or above)
+    * MSBuild support for LLVM (clang-cl) toolset
+* Documentation (when `DOCUMENTATION=on`)
+  * Chocolatey and the following packages:
+    * Doxygen (`choco install doxygen.install`)
+    * Python 3 (`choco install python3`)
+    * Sphinx (`pip3 install sphinx`)
+    * Breathe (`pip3 install breathe`)
+    * ReadTheDocs Theme for Sphinx (`pip3 install sphinx-rtd-theme`)
 
 ## Project Structure
 
