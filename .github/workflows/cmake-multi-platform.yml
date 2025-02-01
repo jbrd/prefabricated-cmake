@@ -19,21 +19,35 @@ jobs:
       #
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
         build_type: [Release]
-        c_compiler: [clang]  # TODO: Test alternative compilers in the future (cl, gcc)
         python_version: [3.12]
+        c_compiler: [cl, clang, gcc]
         include:
           - os: windows-latest
-            c_compiler: "clang"
-            cxx_compiler: "clang++"
+            c_compiler: "cl"
+            cxx_compiler: "cl"
           - os: ubuntu-latest
             c_compiler: "clang"
             cxx_compiler: "clang++"
+          - os: ubuntu-latest
+            c_compiler: "gcc"
+            cxx_compiler: "g++"
           - os: macos-latest
             c_compiler: "clang"
             cxx_compiler: "clang++"
-
+          - os: macos-latest
+            c_compiler: "gcc"
+            cxx_compiler: "g++"
+        exclude:
+          - os: windows-latest
+            c_compiler: "clang"
+          - os: windows-latest
+            c_compiler: "gcc"
+          - os: ubuntu-latest
+            c_compiler: "cl"
+          - os: macos-latest
+            c_compiler: "cl"
     steps:
     - uses: actions/checkout@v4
       with:

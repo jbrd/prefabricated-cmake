@@ -28,7 +28,6 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Each component can have its own public sources, private sources, documentation, and tests
   * C++17 by default (can be overridden by overriding `CMAKE_CXX_STANDARD` variable)
   * Strict C/C++ compilation by default (can be overridden via the `STRICT` option)
-  * Clang compilation by default (Linux, MacOS, and Windows)
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
   * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
 * Entire cross-platform toolchain (Linux, MacOS, Windows)
