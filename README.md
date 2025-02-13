@@ -31,6 +31,7 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * Convenience compiler definitions (PROJECT_VERSION, PUBLIC_API for public symbols)
   * Automatic source groups to ensure that IDEs like Visual Studio have a project / filter structure that matches the file system
 * Entire cross-platform toolchain (Linux, MacOS, Windows)
+  * On Linux, if linking against libstdc++, support for explicitly turning CXX11_ABI on/off (via the `CXX11_ABI` variable)
 * Prefabricated [Clang-Format](https://webkit.org/code-style-guidelines/) Support
   * A `format` target for automatically formatting source code with Clang-Format
   * A `format-check` target for validating that source code is correctly Clang-Formatted
@@ -91,12 +92,13 @@ If you are using it in your project, and want to be included in this list, pleas
 
 The following options can be specified on the command-line when configuring CMake via the `-D` argument:
 
-| Option                | Description                    | Default Value          |
-|-----------------------|--------------------------------|---------------|
-| `CLANG_FORMAT`        | Include Clang Format targets [on/off]                                         | on             |
-| `DOCUMENTATION`       | Include documentation targets [on/off]                                         | on             |
-| `STRICT`       | Strict compilation (all warnings, warnings as errors) [on/off]                             | on             |
-| `VALGRIND`            | Additionally run unit tests through Valgrind (if installed, Linux only) [on/off] | on             |
+| Option                | Description                                                                                                | Default Value |
+|-----------------------|------------------------------------------------------------------------------------------------------------|---------------|
+| `CLANG_FORMAT`        | Include Clang Format targets [on/off]                                                                      | on            |
+| `CXX11_ABI`           | On Linux if linking against libstdc++, explicitly turn CXX11_ABI [on/off]. Uses compiler default if empty. | (empty)       |
+| `DOCUMENTATION`       | Include documentation targets [on/off]                                                                     | on            |
+| `STRICT`              | Strict compilation (all warnings, warnings as errors) [on/off]                                             | on            |
+| `VALGRIND`            | Additionally run unit tests through Valgrind (if installed, Linux only) [on/off]                           | on            |
 
 Developers are encouraged to install the full set of toolchain requirements (see below) and leave all of these turned on by default, such that the entire toolchain is exercised.
 
