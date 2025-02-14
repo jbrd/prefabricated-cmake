@@ -126,7 +126,7 @@ function(finalise_docs)
 		endif()
 		
 		add_custom_target(docs
-			${SPHINX_COMMAND} html
+			${CMAKE_COMMAND} -E env SPHINXOPTS="--fail-on-warning" -- ${SPHINX_COMMAND} html
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs/sphinx
 		)
 		add_dependencies(docs copy_configured_doc_files)
