@@ -4,7 +4,7 @@
 
 A CMake build system for component-based C++ projects.
 
-**Current Release:** 1.0.0 (**[Full Changelog](CHANGELOG.md)**)
+**Current Release:** 1.1.0 (**[Full Changelog](CHANGELOG.md)**)
 
 
 ## What and Why?
