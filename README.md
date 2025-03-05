@@ -220,14 +220,19 @@ are only available for static linking at build time.
 
 #### The `add_component_runtime_library` Function
 
-Use this when the current directory represents a private runtime library. Runtime
-libraries are deployed to the binary directory as part of the install target for
-the project. Runtime libraries are only available for dynamic linking at build time
-and may also be dynamically loaded at runtime (via `dlopen`, `LoadModule`, etc).
+Use this when the current directory represents a private runtime library.
+Runtime libraries are only available for dynamic linking at build time
+and may also be dynamically loaded at runtime (via dlopen, LoadModule, etc).
+
 Runtime libraries are considered private to the project, so header files are not
-included as part of the install target for this project and the library itself
-may be deployed to a directory not available for linking outside the project (e.g.
-`bin` instead of `lib` on Unix).
+included as part of the install target and the library itself is not available for
+linking outside the project (e.g. not deployed to lib).
+
+The install location of a runtime library can be controlled with the optional
+`DESTINATION <arg>` argument, which can be useful when the runtime library is a
+plug-in that needs to be installed in some non-standard location dictated by the
+host application. If this argument is not specified, runtime libraries are deployed
+to the binaries folder by default.
 
 
 #### The `add_component_test` Function
