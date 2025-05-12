@@ -4,7 +4,7 @@
 
 A CMake build system for component-based C++ projects.
 
-**Current Release:** 1.1.0 (**[Full Changelog](CHANGELOG.md)**)
+**Current Release:** 1.2.0 (**[Full Changelog](CHANGELOG.md)**)
 
 
 ## What and Why?
@@ -240,7 +240,7 @@ to the binaries folder by default.
 Use this when the current directory represents a test executable. Test executables
 are considered private to the project and are therefore ignored by the install
 target. Test executables are automatically added to the test target for the
-project.
+project. Tests have their working directory set by default to the project root directory, to make it easier for tests to reference test data in the project
 
 
 #### The `set_component_dependencies` Function
