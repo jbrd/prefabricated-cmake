@@ -1,6 +1,6 @@
 # prefabricated-cmake Changelog
 
-## Version 1.2.0
+## Version 1.2.1
 
 * Tests now have their working directory set by default to the project root directory, to make it easier for tests to reference test data in the project
 
