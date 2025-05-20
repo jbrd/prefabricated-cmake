@@ -1,6 +1,7 @@
 # Option to control strict compilation (all warnings, warnings as errors)
 option(CLANG_FORMAT "Include Clang Format targets [on/off]" ON)
-option(VALGRIND "Additionally run unit tests through Valgrind (if installed, Linux only) [on/off]" ON)
+option(VALGRIND "Additionally run unit tests through Valgrind memcheck (if installed, Linux only) [on/off]" ON)
+set(VALGRIND_ARGS "" CACHE STRING "Additional arguments to pass Valgrind memcheck")
 
 # Gathers dependencies for the project.
 macro(gather_dependencies)

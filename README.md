@@ -4,7 +4,7 @@
 
 A CMake build system for component-based C++ projects.
 
-**Current Release:** 1.2.1 (**[Full Changelog](CHANGELOG.md)**)
+**Current Release:** 1.2.2 (**[Full Changelog](CHANGELOG.md)**)
 
 
 ## What and Why?
@@ -37,7 +37,7 @@ The goal of this project is to provide a similar philosophy for standalone C++ p
   * A `format-check` target for validating that source code is correctly Clang-Formatted
   * Optionally place a `.clang-format` file in the root of your project to override the defaults
 * Prefabricated support for unit test executables
-  * All tests are run standalone and then through Valgrind on MacOS and Linux for additional memory validation
+  * All tests are run standalone and then through Valgrind memcheck on MacOS and Linux for additional memory validation
 * Prefabricated Sphinx documentation project
   * Generated documentation output for the example project [can be viewed here](https://jbrd.github.io/prefabricated-cmake/)
   * Supports both project-level and component-level documentation
@@ -98,7 +98,8 @@ The following options can be specified on the command-line when configuring CMak
 | `CXX11_ABI`           | On Linux if linking against libstdc++, explicitly turn CXX11_ABI [on/off]. Uses compiler default if empty. | (empty)       |
 | `DOCUMENTATION`       | Include documentation targets [on/off]                                                                     | on            |
 | `STRICT`              | Strict compilation (all warnings, warnings as errors) [on/off]                                             | on            |
-| `VALGRIND`            | Additionally run unit tests through Valgrind (if installed, Linux only) [on/off]                           | on            |
+| `VALGRIND`            | Additionally run unit tests through Valgrind memcheck (if installed, Linux only) [on/off]                  | on            |
+| `VALGRIND_ARGS`       | Additional arguments to pass Valgrind memcheck                                                             |               |
 
 Developers are encouraged to install the full set of toolchain requirements (see below) and leave all of these turned on by default, such that the entire toolchain is exercised.
 
