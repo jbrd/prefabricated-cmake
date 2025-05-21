@@ -1,8 +1,12 @@
 # prefabricated-cmake Changelog
 
-## Version 1.2.1
+## Version 1.2.2
 
 * Tests now have their working directory set by default to the project root directory, to make it easier for tests to reference test data in the project
+
+* Tests run under Valgrind now run under `memcheck` only. Support for `helgrind` has been removed as it is known to produce too many false positives in production code.
+
+* Added `VALGRIND_ARGS` option so that projects can specify additional memcheck options (suppressions files, etc...)
 
 ## Version 1.1.0
 
