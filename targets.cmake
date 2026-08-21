@@ -9,6 +9,9 @@ function(apply_internal_target_properties TARGET)
 	# Common target properties
 	apply_common_target_properties(${TARGET})
 
+	# Configure compiler properties
+	target_configure_compiler(${TARGET})
+
 	# Set version properties.
 	set_target_properties(${TARGET} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_ABI_VERSION})
 

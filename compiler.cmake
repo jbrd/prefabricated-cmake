@@ -15,17 +15,6 @@ macro(configure_compiler)
 	add_compile_definitions(PROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 	add_compile_definitions(PROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH})
 
-	# Warning severity (STRICT by default).
-	if(${STRICT})
-		if(WIN32)
-			set(CMAKE_C_FLAGS "/W4 /WX ${CMAKE_C_FLAGS}")
-			set(CMAKE_CXX_FLAGS "/W4 /WX ${CMAKE_CXX_FLAGS}")
-		else()
-			set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition -pedantic-errors ${CMAKE_C_FLAGS}")
-			set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic-errors ${CMAKE_CXX_FLAGS}")
-		endif()
-	endif( )
-
 	# Standard definitions - PUBLIC_API macro for marking symbols to be exported in .dlls
 	if(WIN32)
 		add_compile_definitions(PUBLIC_API=__declspec\(dllexport\))
@@ -53,4 +42,16 @@ macro(configure_compiler)
 	# Use folders to organise Visual Studio projects in Solution Explorer
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+endmacro()
+
+# Called to initialise a target's compiler settings
+macro(target_configure_compiler TARGET)
+	# Warning severity (STRICT by default).
+	if(${STRICT})
+		if(WIN32)
+			target_compile_options(${TARGET} PRIVATE /W4 /WX)
+		else()
+			target_compile_options(${TARGET} PRIVATE -Wall -Wextra -Werror -Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition -pedantic-errors)
+		endif()
+	endif()
 endmacro()
