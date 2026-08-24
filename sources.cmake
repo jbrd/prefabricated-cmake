@@ -39,7 +39,7 @@ endfunction(make_source_groups)
 # files.
 function(gather_sources PREFIX SOURCES HEADERS)
 
-	file(GLOB_RECURSE SOURCE_FILES ${PREFIX}/*.cpp)
+	file(GLOB_RECURSE SOURCE_FILES ${PREFIX}/*.cpp ${PREFIX}/*.c)
 	file(GLOB_RECURSE HEADER_FILES ${PREFIX}/*.h)
 	set(SOURCES_LOCAL ${SOURCE_FILES})
 	list(APPEND SOURCES_LOCAL ${HEADER_FILES})
