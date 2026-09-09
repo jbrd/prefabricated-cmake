@@ -29,6 +29,8 @@ function(add_test_target TARGET SOURCES)
 			add_test(NAME ${TARGET}_memcheck COMMAND ${VALGRIND_PATH} ${MEMCHECK_ARGS} $<TARGET_FILE:${TARGET}> WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 		endif()
 	endif()
+	# Ensure test targets pick up DLL dependencies
+	set_tests_properties(${TARGET} PROPERTIES ENVIRONMENT_MODIFICATION "PATH=path_list_append:$<TARGET_RUNTIME_DLL_DIRS:${TARGET}>")
 endfunction()
 
 # Check whether there is a Tests directory. If so, add a corresponding test target.
